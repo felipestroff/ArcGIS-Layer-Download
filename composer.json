@@ -3,5 +3,19 @@
     "description": "Convert and download ArcGIS layers in the formats: CSV, XLS, FILEGEODATABASE, SHAPEFILE, KML.",
     "keywords": ["arcgis", "javascript"],
     "license": "MIT",
-    "type": "project"
+    "type": "project",
+    "homepage": "https://arcgis-layer-download.herokuapp.com",
+    "readme": "./README.md",
+    "authors": [
+        {
+            "name": "Felipe Stroff",
+            "email": "stroff.felipe@gmail.com",
+            "homepage": "https://www.linkedin.com/in/felipestroff",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "stroff.felipe@gmail.com",
+        "chat": "https://api.whatsapp.com/send?phone=5551980392299"
+    }
 }
