@@ -71,7 +71,8 @@ require([
             const ext = format.options[format.selectedIndex].dataset.ext;
     
             files.innerHTML += 
-            `<div aria-label="Abrir este" class="esri-print__exported-file">
+            `<div class="esri-print__exported-file"
+                style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
                 <a download="data_${id}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${sheetContent}">
                     <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">data_${id}.${ext}</span>
                 </a>
@@ -131,7 +132,7 @@ require([
             var options = {
                 interval: 1500,
                 statusCallback: function(j) {
-                    console.log('Job', j);
+                    console.log('Job callback', j);
 
                     btn.innerText = 'Status: ' + j.jobStatus;
                 }
@@ -171,12 +172,22 @@ require([
                         // Prepare item for download
                         const itemUrl = `${jobResults.data.value.url}/data`;
                         const ext = format.options[format.selectedIndex].dataset.ext;
+                        const itemPortalUrl = shareResults.url.replace(
+                            `/sharing/rest/content/items/${shareResults.data.itemId}/share`,
+                            `/home/item.html?id=${shareResults.data.itemId}`
+                        );
         
                         // Create link
                         files.innerHTML += 
-                        `<div aria-label="Abrir este" class="esri-print__exported-file">
-                            <a download="data_${id}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${itemUrl}">
+                        `<div class="esri-print__exported-file"
+                            style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
+                            <a download="data_${id}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${itemUrl}"
+                                style="display: inline; margin-right: 20px;">
                                 <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">data_${id}.${ext}</span>
+                            </a>
+                            <a rel="noreferrer" target="_blank" class="esri-widget__anchor esri-print__exported-file-link" href="${itemPortalUrl}"
+                                style="display: inline; margin-left: 20px;">
+                                <span class="esri-icon-link-external"></span><span class="esri-print__exported-file-link-title">View item</span>
                             </a>
                         </div>`;
     
@@ -220,7 +231,7 @@ require([
             });
         }
         else {
-            errMessage.innerHTML = error.name + ': ' + error.message;
+            errMessage.innerHTML = `${error.name}:${error.message}<br>`;
         }
 
         errMessage.style.display = 'block'; 
