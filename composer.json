@@ -1,6 +1,6 @@
 {
     "name": "arcgis/layer-download",
-    "description": "Download ArcGIS layers in the formats: CSV, XLS, FILEGEODATABASE, SHAPEFILE, KML.",
+    "description": "Convert and download ArcGIS layers in the formats: CSV, XLS, FILEGEODATABASE, SHAPEFILE, KML.",
     "keywords": ["arcgis", "javascript"],
     "license": "MIT",
     "type": "project"
