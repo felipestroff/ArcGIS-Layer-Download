@@ -16,6 +16,9 @@ require([
             format.value === 'xls') {
             convertSheet();
         }
+        else if (format.value === 'geojson') {
+           convertGeojson(); 
+        }
         else {
             extractData();
         }
@@ -74,6 +77,51 @@ require([
             `<div class="esri-print__exported-file"
                 style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
                 <a download="data_${id}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${sheetContent}">
+                    <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">data_${id}.${ext}</span>
+                </a>
+            </div>`;
+
+            files.style.display = 'block';
+
+            btn.classList.remove('esri-button--disabled');
+            btn.innerText = 'Convert';
+        })
+        .catch(function (e) {
+            handleException(e);
+        });
+    }
+
+    function convertGeojson() {
+        btn.classList.add('esri-button--disabled');
+        btn.innerText = 'Loading...';
+
+        errMessage.style.display = 'none';
+
+        const queryTask = new QueryTask({
+            url: serviceUrl.value
+        });
+    
+        const query = new Query();
+        query.returnGeometry = true;
+        query.outFields = ['*'];
+        query.where = '1=1';
+    
+        queryTask.execute(query).then(function(queryResults) {
+            console.log('Query results', queryResults);
+
+            const featureCollection = {
+                type: 'FeatureCollection',
+                features: queryResults.features.map(f => Terraformer.ArcGIS.parse(f))
+            };
+            
+            const geojsonContent = `data:application/geo+json;charset=utf-8,%EF%BB%BF ${encodeURIComponent(JSON.stringify(featureCollection))}`;
+            const id = s4();
+            const ext = format.options[format.selectedIndex].dataset.ext;
+
+            files.innerHTML += 
+            `<div class="esri-print__exported-file"
+                style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
+                <a download="data_${id}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${geojsonContent}">
                     <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">data_${id}.${ext}</span>
                 </a>
             </div>`;
