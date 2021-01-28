@@ -23,6 +23,11 @@ require([
     });
 
     form.addEventListener('submit', function (e) {
+        btn.classList.add('esri-button--disabled');
+        btn.innerText = 'Loading...';
+
+        errMessage.style.display = 'none';
+
         if (format.value === 'csv' ||
             format.value === 'xls') {
             convertSheet();
@@ -38,11 +43,6 @@ require([
     });
 
     async function convertSheet() {
-        btn.classList.add('esri-button--disabled');
-        btn.innerText = 'Loading...';
-
-        errMessage.style.display = 'none';
-
         const response = await queryLayer(false);
         console.log('Query results', response);
 
@@ -72,29 +72,14 @@ require([
 
         sheetContent = `${dataFormat};charset=utf-8,%EF%BB%BF ${encodeURIComponent(sheetContent)}`;
 
-        const ext = format.options[format.selectedIndex].dataset.ext;
         const filename = setFileName();
+        const ext = format.options[format.selectedIndex].dataset.ext;
 
-        files.innerHTML += 
-        `<div class="esri-print__exported-file"
-            style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
-            <a download="${filename}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${sheetContent}">
-                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">${filename}.${ext}</span>
-            </a>
-        </div>`;
-
-        files.style.display = 'block';
-
-        btn.classList.remove('esri-button--disabled');
-        btn.innerText = 'Convert';
+        // Create link
+        createFileLink(filename, sheetContent, ext);
     }
 
     async function convertGeojson() {
-        btn.classList.add('esri-button--disabled');
-        btn.innerText = 'Loading...';
-
-        errMessage.style.display = 'none';
-
         const response = await queryLayer(true);
         console.log('Query results', response);
 
@@ -103,30 +88,15 @@ require([
             features: response.features.map(f => Terraformer.ArcGIS.parse(f))
         };
         
+        const filename = setFileName();
         const geojsonContent = `data:application/geo+json;charset=utf-8,%EF%BB%BF ${encodeURIComponent(JSON.stringify(featureCollection))}`;
         const ext = format.options[format.selectedIndex].dataset.ext;
-        const filename = setFileName();
         
-        files.innerHTML += 
-        `<div class="esri-print__exported-file"
-            style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
-            <a download="${filename}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${geojsonContent}">
-                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">${filename}.${ext}</span>
-            </a>
-        </div>`;
-
-        files.style.display = 'block';
-
-        btn.classList.remove('esri-button--disabled');
-        btn.innerText = 'Convert';
+        // Create link
+        createFileLink(filename, geojsonContent, ext);
     }
 
     function extractData() {
-        btn.classList.add('esri-button--disabled');
-        btn.innerText = 'Loading...';
-
-        errMessage.style.display = 'none';
-
         const inputLayers = [
             {
                 url: serviceUrl.value,
@@ -212,23 +182,7 @@ require([
                         );
         
                         // Create link
-                        files.innerHTML += 
-                        `<div class="esri-print__exported-file"
-                            style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
-                            <a download="${filename}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${itemUrl}"
-                                style="display: inline; margin-right: 20px;">
-                                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">${filename}.${ext}</span>
-                            </a>
-                            <a rel="noreferrer" target="_blank" class="esri-widget__anchor esri-print__exported-file-link" href="${itemPortalUrl}"
-                                style="display: inline; margin-left: 20px;">
-                                <span class="esri-icon-link-external"></span><span class="esri-print__exported-file-link-title">View item</span>
-                            </a>
-                        </div>`;
-    
-                        files.style.display = 'block';
-    
-                        btn.classList.remove('esri-button--disabled');
-                        btn.innerText = 'Convert';
+                        createFileLink(filename, itemUrl, ext, itemPortalUrl);
                     })
                     .catch(function (e) {
                         handleException(e);
@@ -267,6 +221,44 @@ require([
         });
     }
 
+    function setFileName() {
+        var name;
+        const id = new Date().getTime();
+        if (fileName.value) {
+            name = `${fileName.value}`
+        }
+        else {
+            name = `converted_${id}`;
+        }
+        return name;
+    }
+
+    function createFileLink(name, url, ext, portalUrl) {
+        var externalUrl = '';
+        if (portalUrl) {
+            externalUrl =
+            `<a rel="noreferrer" target="_blank" class="esri-widget__anchor esri-print__exported-file-link" href="${portalUrl}"
+                style="display: inline; margin-left: 20px;">
+                <span class="esri-icon-link-external"></span><span class="esri-print__exported-file-link-title">View item</span>
+            </a>`;
+        }
+
+        files.innerHTML += 
+        `<div class="esri-print__exported-file"
+            style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
+            <a download="${name}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${url}"
+                style="display: inline; margin-right: 20px;">
+                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">${name}.${ext}</span>
+            </a>
+            ${externalUrl}
+        </div>`;
+
+        files.style.display = 'block';
+
+        btn.classList.remove('esri-button--disabled');
+        btn.innerText = 'Convert';
+    }
+
     function handleException(error) {
         console.log(error);
 
@@ -283,17 +275,5 @@ require([
         }
 
         errMessage.style.display = 'block'; 
-    }
-
-    function setFileName() {
-        var name;
-        const id = new Date().getTime();
-        if (fileName.value) {
-            name = `${fileName.value}`
-        }
-        else {
-            name = `converted_${id}`;
-        }
-        return name;
     }
 });
