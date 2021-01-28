@@ -137,6 +137,8 @@ require([
         const outputName = {
             itemProperties: {
                 title: filename,
+                tags: tags.value,
+                snippet: `Original data: ${serviceUrl.value}`,
                 description: 'Data exported from: <a href="https://github.com/felipestroff/ArcGIS-Layer-Download" target="_blank" rel="noreferrer">https://github.com/felipestroff/ArcGIS-Layer-Download</a>'
             }
         };
