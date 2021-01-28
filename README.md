@@ -1,5 +1,5 @@
 # ArcGIS Layer Download
-Download ArcGIS layers in the formats: CSV, XLS, FILEGEODATABASE, SHAPEFILE, KML.
+Convert and download ArcGIS layers in the formats: CSV, XLS, FILEGEODATABASE, SHAPEFILE, KML.
 
 Demo: https://arcgis-layer-download.herokuapp.com
 
