@@ -21,12 +21,16 @@
                         ArcGIS Layer Download
                     </h2>
                     <p class="esri-feature-form__description-text">
-                        Download ArcGIS layers in the formats: CSV, XLS, FILEGEODATABASE, SHAPEFILE, KML
+                        Download ArcGIS layers in the formats: CSV, XLS, FILEGEODATABASE, SHAPEFILE, KML.
                     </p>
                 </div>
                 <label class="esri-feature-form__label">
                     Service URL
-                    <input type="url" id="serviceUrl" class="esri-input esri-feature-form__input" required>
+                    <input type="url" id="serviceUrl" class="esri-input esri-feature-form__input" required
+                        placeholder="https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0">
+                        <p class="esri-feature-form__description-text">
+                            Only REST services are supported.
+                        </p>
                 </label>
                 <label class="esri-feature-form__label">
                     Format
@@ -37,6 +41,15 @@
                         <option value="SHAPEFILE" data-ext="zip">SHAPEFILE</option>
                         <option value="KML" data-ext="kml">KML</option>
                     </select>
+                    <p class="esri-feature-form__description-text">
+                        CSV and XLS formats are converted directly.
+                    </p>
+                    <p class="esri-feature-form__description-text">
+                        The rest of the formats use the ArcGIS geoprocessing service (login required on ArcGIS Online).
+                    </p>
+                    <p class="esri-feature-form__description-text">
+                        Files converted by the geoprocessing service will be saved within your organization's ArcGIS Online.
+                    </p>
                 </label>
                 <div id="errMessage" class="esri-feature-form__field-error-message"
                         style="display: none; color: #8c2907"></div>
