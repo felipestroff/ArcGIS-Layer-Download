@@ -137,7 +137,6 @@ require([
                 interval: 1500,
                 statusCallback: function(j) {
                     console.log('Job callback', j);
-
                     btn.innerText = 'Status: ' + j.jobStatus;
                 }
             };
@@ -244,8 +243,7 @@ require([
         }
 
         files.innerHTML += 
-        `<div class="esri-print__exported-file"
-            style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
+        `<div class="esri-print__exported-file">
             <a download="${name}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${url}"
                 style="display: inline; margin-right: 20px;">
                 <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">${name}.${ext}</span>

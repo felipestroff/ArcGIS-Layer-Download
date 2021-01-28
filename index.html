@@ -10,6 +10,7 @@
     <meta name="author" content="Felipe Stroff">
 
     <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+    <link rel="stylesheet" href="./public/css/main.css">
 </head>
 <body>
     <div class="esri-widget esri-component"
@@ -84,8 +85,7 @@
                     </label>
                 </fieldset>
 
-                <div id="errMessage" class="esri-feature-form__field-error-message"
-                        style="display: none; color: #8c2907"></div>
+                <div id="errMessage" class="esri-feature-form__field-error-message"></div>
                 <button id="btn" type="submit" class="esri-button">
                     Convert
                 </button>
@@ -115,6 +115,6 @@
     <script src="https://unpkg.com/terraformer/terraformer.js"></script>
     <!-- Load the ArcGIS Parser -->
     <script src="https://unpkg.com/terraformer-arcgis-parser/terraformer-arcgis-parser.js"></script>
-    <script src="./src/client/index.js"></script>
+    <script src="./public/js/index.js"></script>
 </body>
 </html>

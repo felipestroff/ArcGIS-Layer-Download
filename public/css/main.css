@@ -1,0 +1,18 @@
+body {
+    background-image: url(../img/banner.jpg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: top;
+}
+
+/* Custom esri */
+.esri-feature-form__field-error-message {
+    display: none; 
+    color: #8c2907
+}
+
+.esri-print__exported-file {
+    border-bottom: 1px solid #f3f3f3; 
+    padding-top: 5px; 
+    padding-bottom: 5px;
+}
