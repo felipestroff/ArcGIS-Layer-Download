@@ -36,7 +36,9 @@ require([
         query.outFields = ['*'];
         query.where = '1=1';
     
-        queryTask.execute(query).then(function(results) {
+        queryTask.execute(query).then(function(queryResults) {
+            console.log('Query results', queryResults);
+
             var dataFormat, separator;
             
             if (format.value === 'csv') {
@@ -50,11 +52,11 @@ require([
 
             var sheetContent = '';
 
-            results.fields.forEach(function (field) {
+            queryResults.fields.forEach(function (field) {
                 sheetContent += field.alias + separator;
             });
 
-            results.features.forEach(function (feature) {
+            queryResults.features.forEach(function (feature) {
                 sheetContent += '\r\n';
 
                 Object.values(feature.attributes).forEach(function (attr) {
@@ -124,25 +126,31 @@ require([
 
         // Submit new job
         geoprocessor.submitJob(params).then(function(jobInfo) {
-            var jobid = jobInfo.jobId;
+            console.log('Job info', jobInfo);
           
             var options = {
                 interval: 1500,
                 statusCallback: function(j) {
+                    console.log('Job', j);
+
                     btn.innerText = 'Status: ' + j.jobStatus;
                 }
             };
           
             // Wait for job done
-            geoprocessor.waitForJobCompletion(jobid, options).then(function() {
+            geoprocessor.waitForJobCompletion(jobInfo.jobId, options).then(function(jobComplete) {
+                console.log('Job complete', jobComplete);
+
                 // Request results
-                esriRequest(`${geoprocessor.url}/jobs/${jobid}/results/contentID`, {
+                esriRequest(`${geoprocessor.url}/jobs/${jobInfo.jobId}/results/contentID`, {
                     responseType: 'json',
                     query: {
                         f: 'json'
                     }
                 })
                 .then(function(jobResults) {
+                    console.log('Job results', jobResults);
+
                     // Share item
                     btn.innerText = 'Status: sharing-item...';
 
@@ -157,7 +165,9 @@ require([
                             everyone: true,
                         }
                     })
-                    .then(function() {
+                    .then(function(shareResults) {
+                        console.log('Share results', shareResults);
+
                         // Prepare item for download
                         const itemUrl = `${jobResults.data.value.url}/data`;
                         const ext = format.options[format.selectedIndex].dataset.ext;
