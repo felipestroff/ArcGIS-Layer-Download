@@ -31,6 +31,13 @@
                         <p class="esri-feature-form__description-text">
                             Only REST services are supported.
                         </p>
+                        <p class="esri-feature-form__description-text">
+                            The service must be configured to allow exports. 
+                            <a href="https://enterprise.arcgis.com/en/portal/latest/use/use-hosted-layers.htm#GUID-47A1D795-B330-45D7-89F7-9203A99E6924"
+                                target="_blank" rel="noreferrer" class="esri-attribution__link">
+                                See here
+                            </a>
+                        </p>
                 </label>
                 <label class="esri-feature-form__label">
                     Format
@@ -46,12 +53,36 @@
                         CSV, XLS and GeoJSON formats are converted directly.
                     </p>
                     <p class="esri-feature-form__description-text">
+                        The GeoJSON format may take a long time to convert.
+                    </p>
+                    <p class="esri-feature-form__description-text">
                         The rest of the formats use the ArcGIS geoprocessing service (login required on ArcGIS Online).
                     </p>
                     <p class="esri-feature-form__description-text">
-                        Files converted by the geoprocessing service will be saved within your organization's ArcGIS Online.
+                        Files converted by the geoprocessing service will be saved to your organization's ArcGIS Online as public item.
                     </p>
                 </label>
+
+                <fieldset id="options" class="esri-feature-form__group esri-feature-form__group--sequential esri-feature-form__group--collapsed">
+                    <button id="optionsBtn" class="esri-feature-form__group-header" type="button">
+                        <div class="esri-feature-form__group-title">
+                            <h4 class="esri-feature-form__group-label esri-widget__heading">
+                                Options
+                            </h4>
+                            <p class="esri-feature-form__group-description esri-feature-form__description-text">
+                                Custom file name
+                            </p>
+                        </div>
+                    </button>
+                    <label class="esri-feature-form__label">
+                        File name
+                        <input type="text" id="fileName" class="esri-input esri-feature-form__input">
+                        <p class="esri-feature-form__description-text">
+                            For unnamed files, an automatic ID will be generate.
+                        </p>
+                    </label>
+                </fieldset>
+
                 <div id="errMessage" class="esri-feature-form__field-error-message"
                         style="display: none; color: #8c2907"></div>
                 <button id="btn" type="submit" class="esri-button">
@@ -69,7 +100,7 @@
     </div>
 
     <div class="esri-widget esri-heading esri-component"
-        style="text-align: center;">
+        style="max-width: 200px; margin: 0 auto; text-align: center;">
         <a href="https://github.com/felipestroff/ArcGIS-Layer-Download" target="_blank" rel="noreferrer"
             class="esri-attribution__link">
             <h4 class="esri-heading">

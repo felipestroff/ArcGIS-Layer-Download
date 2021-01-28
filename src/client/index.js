@@ -9,6 +9,19 @@ require([
     Geoprocessor,
     esriRequest
 ) {
+    optionsBtn.addEventListener('click', function (e) {
+        if (options.classList.contains('esri-feature-form__group--collapsed')) {
+            options.classList.remove('esri-feature-form__group--collapsed');
+            options.classList.add('esri-feature-form__group--active');
+        }
+        else {
+            options.classList.remove('esri-feature-form__group--active');
+            options.classList.add('esri-feature-form__group--collapsed');
+        }
+
+        e.preventDefault();
+    });
+
     form.addEventListener('submit', function (e) {
         if (format.value === 'csv' ||
             format.value === 'xls') {
@@ -59,15 +72,14 @@ require([
 
         sheetContent = `${dataFormat};charset=utf-8,%EF%BB%BF ${encodeURIComponent(sheetContent)}`;
 
-        const id = s4();
-
         const ext = format.options[format.selectedIndex].dataset.ext;
+        const filename = setFileName();
 
         files.innerHTML += 
         `<div class="esri-print__exported-file"
             style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
-            <a download="data_${id}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${sheetContent}">
-                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">data_${id}.${ext}</span>
+            <a download="${filename}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${sheetContent}">
+                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">${filename}.${ext}</span>
             </a>
         </div>`;
 
@@ -92,14 +104,14 @@ require([
         };
         
         const geojsonContent = `data:application/geo+json;charset=utf-8,%EF%BB%BF ${encodeURIComponent(JSON.stringify(featureCollection))}`;
-        const id = s4();
         const ext = format.options[format.selectedIndex].dataset.ext;
-
+        const filename = setFileName();
+        
         files.innerHTML += 
         `<div class="esri-print__exported-file"
             style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
-            <a download="data_${id}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${geojsonContent}">
-                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">data_${id}.${ext}</span>
+            <a download="${filename}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${geojsonContent}">
+                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">${filename}.${ext}</span>
             </a>
         </div>`;
 
@@ -121,11 +133,10 @@ require([
             }
         ];
 
-        const id = s4();
-
+        const filename = setFileName();
         const outputName = {
             itemProperties: {
-                title: `data_${id}`,
+                title: filename,
                 description: 'Data exported from: <a href="https://github.com/felipestroff/ArcGIS-Layer-Download" target="_blank" rel="noreferrer">https://github.com/felipestroff/ArcGIS-Layer-Download</a>'
             }
         };
@@ -202,9 +213,9 @@ require([
                         files.innerHTML += 
                         `<div class="esri-print__exported-file"
                             style="border-bottom: 1px solid #f3f3f3; padding-top: 5px; padding-bottom: 5px;">
-                            <a download="data_${id}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${itemUrl}"
+                            <a download="${filename}.${ext}" rel="noreferrer" target="_self" class="esri-widget__anchor esri-print__exported-file-link" href="${itemUrl}"
                                 style="display: inline; margin-right: 20px;">
-                                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">data_${id}.${ext}</span>
+                                <span class="esri-icon-download"></span><span class="esri-print__exported-file-link-title">${filename}.${ext}</span>
                             </a>
                             <a rel="noreferrer" target="_blank" class="esri-widget__anchor esri-print__exported-file-link" href="${itemPortalUrl}"
                                 style="display: inline; margin-left: 20px;">
@@ -272,9 +283,15 @@ require([
         errMessage.style.display = 'block'; 
     }
 
-    let s4 = () => {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
+    function setFileName() {
+        var name;
+        const id = new Date().getTime();
+        if (fileName.value) {
+            name = `${fileName.value}`
+        }
+        else {
+            name = `converted_${id}`;
+        }
+        return name;
     }
 });
