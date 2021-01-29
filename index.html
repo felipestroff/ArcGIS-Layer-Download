@@ -2,12 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8">
-    
-    <title>ArcGIS Layer Download</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Convert and download ArcGIS layers in the formats: CSV, XLS, FILEGEODATABASE, SHAPEFILE, KML.">
     <meta name="author" content="Felipe Stroff">
+
+    <title>ArcGIS Layer Download</title>
 
     <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
     <link rel="stylesheet" href="./public/css/main.css">
@@ -25,6 +24,7 @@
                         Download ArcGIS layers in the formats: CSV, XLS, GeoJSON, FILEGEODATABASE, SHAPEFILE, KML
                     </p>
                 </div>
+
                 <label class="esri-feature-form__label">
                     Service URL
                     <input type="url" id="serviceUrl" class="esri-input esri-feature-form__input" required
@@ -40,6 +40,7 @@
                             </li>
                         </ul>
                 </label>
+
                 <label class="esri-feature-form__label">
                     Format
                     <select id="format" class="esri-input esri-feature-form__input esri-select" required>
@@ -65,10 +66,20 @@
                                 Options
                             </h4>
                             <p class="esri-feature-form__group-description esri-feature-form__description-text">
-                                Custom file name, tags
+                                Filter, custom file name, tags
                             </p>
                         </div>
                     </button>
+
+                    <label class="esri-feature-form__label">
+                        Filter
+                        <input type="text" id="filter" class="esri-input esri-feature-form__input"
+                            placeholder="areaname = 'Palm Springs'">
+                        <p class="esri-feature-form__description-text">
+                            Where clause
+                        </p>
+                    </label>
+
                     <label class="esri-feature-form__label">
                         File name
                         <input type="text" id="fileName" class="esri-input esri-feature-form__input">
@@ -76,9 +87,11 @@
                             For unnamed files, an automatic ID will be generate
                         </p>
                     </label>
+
                     <label class="esri-feature-form__label">
                         Tags
-                        <input type="text" id="tags" class="esri-input esri-feature-form__input">
+                        <input type="text" id="tags" class="esri-input esri-feature-form__input"
+                            placeholder="download, converted, etc">
                         <p class="esri-feature-form__description-text">
                             Comma separated
                         </p>
@@ -86,6 +99,7 @@
                 </fieldset>
 
                 <div id="errMessage" class="esri-feature-form__field-error-message"></div>
+
                 <button id="btn" type="submit" class="esri-button">
                     Convert
                 </button>
@@ -111,9 +125,9 @@
     </div>
 
     <script src="https://js.arcgis.com/4.18/"></script>
-    <!-- Load the main Terraformer library -->
+    <!-- Terraformer library -->
     <script src="https://unpkg.com/terraformer/terraformer.js"></script>
-    <!-- Load the ArcGIS Parser -->
+    <!-- Terraformer ArcGIS Parser -->
     <script src="https://unpkg.com/terraformer-arcgis-parser/terraformer-arcgis-parser.js"></script>
     <script src="./public/js/index.js"></script>
 </body>

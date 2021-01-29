@@ -100,6 +100,7 @@ require([
         const inputLayers = [
             {
                 url: serviceUrl.value,
+                filter: filter.value
             }
         ];
 
@@ -209,7 +210,7 @@ require([
             const query = new Query();
             query.returnGeometry = geom;
             query.outFields = ['*'];
-            query.where = '1=1';
+            query.where = filter.value ? filter.value : '1=1';
         
             queryTask.execute(query).then(function(queryResults) {
                 resolve(queryResults);
