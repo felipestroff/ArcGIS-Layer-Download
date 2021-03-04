@@ -43,7 +43,7 @@ require([
     });
 
     async function convertSheet() {
-        const response = await queryLayer(false);
+        const response = await queryLayer();
         console.log('Query results', response);
 
         var dataFormat, separator;
@@ -57,6 +57,10 @@ require([
         }
 
         var sheetContent = '';
+        
+        // Append coordinates fields
+        sheetContent += 'latitude' + ',';
+        sheetContent += 'longitude' + ',';
 
         response.fields.forEach(function (field) {
             sheetContent += field.alias + separator;
@@ -64,6 +68,13 @@ require([
 
         response.features.forEach(function (feature) {
             sheetContent += '\r\n';
+            
+            const latitude = feature.geometry.centroid.latitude,
+                longitude = feature.geometry.centroid.latitude;
+
+            // Append coordinates attrs in cols
+            sheetContent += latitude + ',';
+            sheetContent += longitude + ',';
 
             Object.values(feature.attributes).forEach(function (attr) {
                 sheetContent += attr + separator;
@@ -80,7 +91,7 @@ require([
     }
 
     async function convertGeojson() {
-        const response = await queryLayer(true);
+        const response = await queryLayer();
         console.log('Query results', response);
 
         const featureCollection = {
@@ -201,14 +212,15 @@ require([
         });
     }
 
-    function queryLayer(geom) {
+    function queryLayer() {
         return new Promise(function(resolve, reject) {
             const queryTask = new QueryTask({
                 url: serviceUrl.value
             });
         
             const query = new Query();
-            query.returnGeometry = geom;
+            query.returnGeometry = true;
+            query.returnCentroid = true;
             query.outFields = ['*'];
             query.outSpatialReference = {'wkid' : 4326};
             query.where = filter.value ? filter.value : '1=1';
