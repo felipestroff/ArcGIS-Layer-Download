@@ -69,8 +69,9 @@ require([
         response.features.forEach(function (feature) {
             sheetContent += '\r\n';
             
-            const latitude = feature.geometry.extent.center.latitude,
-                longitude = feature.geometry.extent.center.longitude;
+            const geom = feature.geometry,
+                latitude = geom.type === 'point' ? geom.latitude : geom.extent.center.latitude,
+                longitude = geom.type === 'point' ? geom.longitude : geom.extent.center.longitude;
 
             // Append coordinates attrs in cols
             sheetContent += latitude + ',';
