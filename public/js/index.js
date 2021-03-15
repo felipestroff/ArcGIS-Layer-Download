@@ -69,8 +69,8 @@ require([
         response.features.forEach(function (feature) {
             sheetContent += '\r\n';
             
-            const latitude = feature.geometry.centroid.latitude,
-                longitude = feature.geometry.centroid.latitude;
+            const latitude = feature.geometry.extent.center.latitude,
+                longitude = feature.geometry.extent.center.longitude;
 
             // Append coordinates attrs in cols
             sheetContent += latitude + ',';
@@ -220,7 +220,6 @@ require([
         
             const query = new Query();
             query.returnGeometry = true;
-            query.returnCentroid = true;
             query.outFields = ['*'];
             query.outSpatialReference = {'wkid' : 4326};
             query.where = filter.value ? filter.value : '1=1';
