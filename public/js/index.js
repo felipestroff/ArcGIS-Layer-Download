@@ -12,10 +12,22 @@ require([
 	window.onload = function () {
 		const params = (new URL(document.location)).searchParams;
 		const serviceUrlParam = params.get('serviceUrl');
+		const formatParam = params.get('format');
 		
 		if (serviceUrlParam) {
 			let input = document.getElementById('serviceUrl');
 			input.value = serviceUrlParam;
+		}
+		
+		if (formatParam) {
+			let input = document.getElementById('format');
+			
+			for (i = 0; i < input.length; i = i + 1) {
+				if (input.options[i].value == formatParam) {
+					input.value = formatParam;
+					input.options[i].selected = true;
+				}
+			}
 		}
 	}
 	
