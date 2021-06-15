@@ -59,8 +59,8 @@ require([
         var sheetContent = '';
         
         // Append coordinates fields
-        sheetContent += 'latitude' + ',';
-        sheetContent += 'longitude' + ',';
+        sheetContent += 'latitude' + separator;
+        sheetContent += 'longitude' + separator;
 
         response.fields.forEach(function (field) {
             sheetContent += field.alias + separator;
@@ -69,13 +69,20 @@ require([
         response.features.forEach(function (feature) {
             sheetContent += '\r\n';
             
-            const geom = feature.geometry,
-                latitude = geom.type === 'point' ? geom.latitude : geom.extent.center.latitude,
-                longitude = geom.type === 'point' ? geom.longitude : geom.extent.center.longitude;
+			if (feature.geometry) {
+				const geom = feature.geometry,
+					latitude = geom.type === 'point' ? geom.latitude : geom.extent.center.latitude,
+					longitude = geom.type === 'point' ? geom.longitude : geom.extent.center.longitude;
 
-            // Append coordinates attrs in cols
-            sheetContent += latitude + ',';
-            sheetContent += longitude + ',';
+				// Append coordinates attrs in cols
+				sheetContent += latitude + separator;
+				sheetContent += longitude + separator;
+			}
+			else {
+				// Append coordinates attrs in cols
+				sheetContent += '0' + separator;
+				sheetContent += '0' + separator;
+			}
 
             Object.values(feature.attributes).forEach(function (attr) {
                 sheetContent += attr + separator;
