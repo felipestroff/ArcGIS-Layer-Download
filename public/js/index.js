@@ -9,6 +9,16 @@ require([
     Geoprocessor,
     esriRequest
 ) {
+	window.onload = function () {
+		const params = (new URL(document.location)).searchParams;
+		const serviceUrlParam = params.get('serviceUrl');
+		
+		if (serviceUrlParam) {
+			let input = document.getElementById('serviceUrl');
+			input.value = serviceUrlParam;
+		}
+	}
+	
     optionsBtn.addEventListener('click', function (e) {
         if (options.classList.contains('esri-feature-form__group--collapsed')) {
             options.classList.remove('esri-feature-form__group--collapsed');
